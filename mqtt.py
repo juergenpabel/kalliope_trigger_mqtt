@@ -11,9 +11,9 @@ logging.basicConfig()
 logger = logging.getLogger("kalliope")
 
 
-class MQTT(Thread):
+class Mqtt(Thread):
 	def __init__(self, **kwargs):
-		super(MQTT, self).__init__()
+		super(Mqtt, self).__init__()
 		logger.debug("[trigger:mqtt] __init__()")
 		self.callback = kwargs.get('callback', None)
 		if self.callback is None:
@@ -28,11 +28,11 @@ class MQTT(Thread):
 		self.mqtt = mqtt_client.Client('kalliope_trigger_mqtt')
 		self.mqtt.connect('127.0.0.1', 1883)
 		self.mqtt.subscribe(self.trigger_topic)
-		self.mqt.on_message = self.on_mqtt
+		self.mqtt.on_message = self.on_mqtt
 		self.paused = False
 		self.mqtt.loop_forever()
 
-	def on_mqtt(self):
+	def on_mqtt(self, client, userdata, message):
 		logger.debug("[trigger:mqtt] on_mqtt()")
 		if self.paused is False:
 			logger.info("[trigger:mqtt] trigger activated()")

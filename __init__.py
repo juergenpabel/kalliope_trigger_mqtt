@@ -1,1 +1,1 @@
-from .mqtt import MQTT
+from .mqtt import Mqtt
