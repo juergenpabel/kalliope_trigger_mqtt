@@ -1,0 +1,6 @@
+---
+- name: mqtt
+  hosts: localhost
+  gather_facts: no
+  connection: local
+
