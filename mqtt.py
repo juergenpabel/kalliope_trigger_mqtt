@@ -34,15 +34,21 @@ class Mqtt(Thread):
 
 	def on_mqtt(self, client, userdata, message):
 		logger.debug("[trigger:mqtt] on_mqtt()")
-		if self.paused is False:
-			logger.info("[trigger:mqtt] trigger activated()")
-			self.callback()
+		payload = message.payload.decode('utf-8')
+		if payload == "pause":
+			self.pause()
+		if payload == "unpause":
+			self.unpause()
+		if payload is None or payload == "" or payload == "trigger":
+			if self.paused is False:
+				logger.info("[trigger:mqtt] trigger activated()")
+				self.callback()
 
 	def pause(self):
-		logger.debug("[trigger:mqtt] pause()")
+		logger.info("[trigger:mqtt] pause()")
 		self.paused = True
 
 	def unpause(self):
-		logger.debug("[trigger:mqtt] unpause()")
+		logger.info("[trigger:mqtt] unpause()")
 		self.paused = False
 
