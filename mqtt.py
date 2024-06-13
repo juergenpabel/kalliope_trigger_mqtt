@@ -18,6 +18,9 @@ class Mqtt(Thread):
 		self.callback = kwargs.get('callback', None)
 		if self.callback is None:
 			raise MissingParameterException("Callback function is required")
+		self.trigger_broker_ip = kwargs.get('broker_ip', '127.0.0.1')
+		self.trigger_broker_port = kwargs.get('broker_port', 1883)
+		self.trigger_client_id = kwargs.get('client_id', 'kalliope:trigger:mqtt')
 		self.trigger_topic = kwargs.get('topic', None)
 		if self.trigger_topic is None:
 			raise MissingParameterException("Trigger (mqtt) topic is required")
@@ -25,8 +28,8 @@ class Mqtt(Thread):
 
 	def run(self):
 		logger.debug("[trigger:mqtt] run()")
-		self.mqtt = mqtt_client.Client('kalliope_trigger_mqtt')
-		self.mqtt.connect('127.0.0.1', 1883)
+		self.mqtt = mqtt_client.Client(self.trigger_client_id)
+		self.mqtt.connect(self.trigger_broker_ip, self.trigger_broker_port)
 		self.mqtt.subscribe(self.trigger_topic)
 		self.mqtt.on_message = self.on_mqtt
 		self.paused = False
